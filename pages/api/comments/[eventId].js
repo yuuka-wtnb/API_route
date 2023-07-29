@@ -25,11 +25,11 @@ async function handler(req, res) {
       email,
       name,
       text,
-      eventId
+      eventId,
     };
 
     const db = client.db();
-    const result = await db.collection('comments').insertOne(newComment);
+    const result = await db.collection("comments").insertOne(newComment);
 
     console.log(result);
 
@@ -38,12 +38,18 @@ async function handler(req, res) {
     res.status(201).json({ message: "Added comment", comment: newComment });
   }
   if (req.method === "GET") {
-    const dummyList = [
-        {id: 'c1', name: 'Yuka', text:'first test comment'},
-        {id: 'c2', name: 'Yuuka', text:'Second test comment'},
-    ]
+    const db = client.db();
 
-    res.status(200).json({ comments: dummyList});
+    //.find()で全部のデータをfetchできる
+    //.toArray() to get all documents as array
+    //.sort() 降順でidを並べ替えたいので、アンダースコアidを追加して、値をマイナス1に設定する
+    const documents = await db
+      .collection("comments")
+      .find()
+      .sort({ id: -1 })
+      .toArray();
+
+    res.status(200).json({ comments: documents });
   }
 
   client.close();
