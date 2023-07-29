@@ -11,13 +11,13 @@ async function handler(req, res) {
     }
 
     const client = await MongoClient.connect(
-      "mongodb+srv://dbUser:dbUserpass@cluster0.d4gvdkd.mongodb.net/?retryWrites=true&w=majority"
+      "mongodb+srv://dbUser:dbUserpass@cluster0.d4gvdkd.mongodb.net/events?retryWrites=true&w=majority"
     );
     //access to the database
     const db = client.db();
 
     //inserting one document
-    await db.collection("emails").insertOne({ email: userEmail });
+    await db.collection("newsletter").insertOne({ email: userEmail });
 
     //Disconnect
     client.close();
